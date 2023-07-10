@@ -1,0 +1,37 @@
+version: "3.8"
+name: "merch_app"
+services:
+    redis:
+        image: redis:6.2.4-alpine3.13
+        restart: always
+        ports:
+            - "6700:6379/tcp"
+        logging:
+            driver: json-file
+            options:
+                max-size: "10m"
+                max-file: "5"
+    db:
+        image: mysql:8
+        restart: always
+        environment:
+            - MYSQL_ROOT_PASSWORD=qwerty11!@
+            - MYSQL_DATABASE=merch_app
+        volumes:
+            - data:/var/lib/mysql
+        ports:
+            - "6701:3306/tcp"
+        logging:
+            driver: json-file
+            options:
+                max-size: "10m"
+                max-file: "5"
+        command:
+            [
+                "--character-set-server=utf8mb4",
+                "--collation-server=utf8mb4_unicode_ci",
+                "--max-connections=1000",
+            ]
+
+volumes:
+    data: { }
